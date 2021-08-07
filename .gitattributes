@@ -1,0 +1,2 @@
+C:/Users/tinom/Documents/WGU/Capstone/FireNamesAndLocations.csv filter=lfs diff=lfs merge=lfs -text
+FireNamesAndLocations.csv filter=lfs diff=lfs merge=lfs -text
