@@ -2,8 +2,8 @@ from pandas import read_table
 import numpy as np
 import matplotlib.pyplot as plt
 
-def readData():
-    # Function reads csv file into memory
+def readDataIntoHistogram():
+
     print("Read data here")
 
 if __name__ == '__main__':
