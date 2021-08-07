@@ -11,16 +11,29 @@ def readDataIntoHistogram():
     southEast = ['AR', 'LA', 'MS', 'AL', 'TN', 'KY', 'WV', 'VA', 'NC', 'SC', 'GA', 'FL']
     northEast = ['ME', 'NH', 'VT', 'NY', 'PA', 'MD', 'DE', 'NJ', 'CT', 'RI', 'MA']
 
-    regions = [west, southWest, midWest, southEast, northEast]
-
     #used to keep count of fires in each region
     w = sW = mW = sE = nE = 0
 
+    resultRows = []
     with open('fireData.csv', 'r') as readOBJ:
         csvReader = reader(readOBJ)
-        listOfRows = list(csvReader)
-        print(listOfRows)
+        resultRows.append(list(csvReader))
 
+
+    for rows in resultRows:
+        for row in rows:
+            if row[1] in west:
+                w += 1
+            elif row[1] in southWest:
+                sW += 1
+            elif row[1] in midWest:
+                mW += 1
+            elif row[1] in southEast:
+                sE += 1
+            elif row[1] in northEast:
+                nE += 1
+            else:
+                x = 0
 
 
 if __name__ == '__main__':
