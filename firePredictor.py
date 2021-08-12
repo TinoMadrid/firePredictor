@@ -1,7 +1,7 @@
-from pandas import read_table
 from csv import reader
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 def readDataIntoHistogram():
     # regions of the US
@@ -34,7 +34,15 @@ def readDataIntoHistogram():
                 nE += 1
             else:
                 x = 0
+    plotHistogram(w, sW, mW, sE, nE)
 
+def plotHistogram(west, southwest, midwest, southeast, northeast):
+    valueList = [west, southwest, midwest, southeast, northeast]
+
+    xAxisLabels = ['West', 'SouthWest', 'MidWest', 'SouthEast', 'NorthEast']
+
+    plt.bar(xAxisLabels, valueList)
+    plt.show()
 
 if __name__ == '__main__':
     print("Beginning")
