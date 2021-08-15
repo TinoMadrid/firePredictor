@@ -112,14 +112,18 @@ def plotHistogram(west, southwest, midwest, southeast, northeast):
     xAxisLabels = ['1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015']
 
     X = np.arange(5)
-    fig = plt.figure()
-    ax = fig.add_axes([0,0,1,1])
+    #fig = plt.figure() --old way to plot that can't add values to x and y axis
+    #ax = fig.add_axes([0,0,1,1])
+
+    fig, ax = plt.subplots()
 
     ax.bar(X + 0.00, data[0], color='b', width=0.2)
     ax.bar(X + 0.2, data[1], color='k', width=0.2)
     ax.bar(X + 0.4, data[2], color='r', width=0.2)
     ax.bar(X + 0.6, data[3], color='y', width=0.2)
     ax.bar(X + 0.8, data[4], color='g', width=0.2)
+
+    #ax.set_xticks(X)
 
     plt.show()
 
