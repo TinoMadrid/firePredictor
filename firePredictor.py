@@ -32,7 +32,7 @@ def readDataIntoHistogram():
     with open('fireData.csv', 'r') as readOBJ:
         csvReader = reader(readOBJ)
         resultRows.append(list(csvReader))
-        print(resultRows)
+        #print(resultRows)
 
     #count occurrences of each region and years
     for rows in resultRows:
@@ -99,21 +99,28 @@ def readDataIntoHistogram():
                     northEast2011To2015 += 1
             else:
                 x = 0
-    plotHistogram(w, sW, mW, sE, nE)
+    totalWest = [west1992To1995, west1996To2000, west2001To2005, west2006To2010, west2011To2015]
+    totalsouthWest = [southWest1992To1995, southWest1996To2000, southWest2001To2005, southWest2006To2010, southWest2011To2015]
+    totalmidWest = [midWest1992To1995, midWest1996To2000, midWest2001To2005, midWest2006To2010, midWest2011To2015]
+    totalsouthEast = [southEast1992To1995, southEast1996To2000, southEast2001To2005, southEast2006To2010, southEast2011To2015]
+    totalnorthEast = [northEast1992To1995, northEast1996To2000, northEast2001To2005, northEast2006To2010, northEast2011To2015]
+
+    plotHistogram(totalWest, totalsouthWest, totalmidWest, totalsouthEast, totalnorthEast)
 
 def plotHistogram(west, southwest, midwest, southeast, northeast):
-    valueList = [west, southwest, midwest, southeast, northeast]
+    data = [west, southwest, midwest, southeast, northeast]
+    xAxisLabels = ['1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015']
 
-    xAxisLabels = ['West', 'SouthWest', 'MidWest', 'SouthEast', 'NorthEast']
-    X = np.arange(4)
+    X = np.arange(5)
     fig = plt.figure()
     ax = fig.add_axes([0,0,1,1])
 
-    #ax.bar(X + 0.00, data[0], color='b', width=0.25)
-    #ax.bar(X + 0.25, data[1], color='g', width=0.25)
-    #ax.bar(X + 0.50, data[2], color='r', width=0.25)
+    ax.bar(X + 0.00, data[0], color='b', width=0.2)
+    ax.bar(X + 0.2, data[1], color='k', width=0.2)
+    ax.bar(X + 0.4, data[2], color='r', width=0.2)
+    ax.bar(X + 0.6, data[3], color='y', width=0.2)
+    ax.bar(X + 0.8, data[4], color='g', width=0.2)
 
-    plt.bar(xAxisLabels, valueList)
     plt.show()
 
 def generatePredictionData(frame):
