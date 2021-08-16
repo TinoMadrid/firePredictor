@@ -122,6 +122,16 @@ def plotHistogram(west, southwest, midwest, southeast, northeast):
 
     ax.set_xticks([0,1,2,3,4])
     ax.set_xticklabels(['1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015'])
+    ax.set_ylabel('Fire Outbreak Count')
+    ax.set_xlabel('Years')
+    ax.set_title('Wildfire Outbreak by Years')
+
+
+    colors = {'west':'blue', 'southwest':'black', 'midwest':'red', 'southeast':'yellow', 'northeast':'green'}
+    labels = list(colors.keys())
+    handles = [plt.Rectangle((0,0),1,1, color=colors[label]) for label in labels]
+    plt.legend(handles, labels)
+
     plt.show()
 
 def generatePredictionData(frame):
