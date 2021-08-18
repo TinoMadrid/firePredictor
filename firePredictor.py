@@ -134,7 +134,18 @@ def plotHistogram(west, southwest, midwest, southeast, northeast):
 
     plt.show()
 
-def generatePredictionData(frame):
+    dataFrame = {
+        'Region': ['West','West','West','West','West', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest',
+                   'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast'],
+        'Years': ['1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015', '1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015', '1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015',
+                  '1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015', '1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015'],
+        'Fire Count': [west[0], west[1], west[2], west[3], west[4], southwest[0], southwest[1], southwest[2], southwest[3], southwest[4], midwest[0], midwest[1], midwest[2], midwest[3], midwest[4],
+                       southeast[0], southeast[1], southeast[2], southeast[3], southeast[4], northeast[0], northeast[1], northeast[2], northeast[3], northeast[4]]
+    }
+    df = pd.DataFrame(dataFrame)
+    precursorOfPredictionData(df)
+
+def precursorOfPredictionData(frame):
     print(frame)
 
 if __name__ == '__main__':
