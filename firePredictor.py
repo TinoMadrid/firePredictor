@@ -2,6 +2,8 @@ from csv import reader
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.model_selection import train_test_split
 
 def readDataIntoHistogram():
     # regions of the US
@@ -145,8 +147,48 @@ def plotHistogram(west, southwest, midwest, southeast, northeast):
     df = pd.DataFrame(dataFrame)
     precursorOfPredictionData(df)
 
-def precursorOfPredictionData(frame):
-    print(frame)
+
+def precursorOfPredictionData(DTframe):
+    fireColumn = DTframe['Fire Count']
+    #fireColumn.reshape(-1,1)
+    #a = np.array(fireColumn.values.tolist())
+    #a.reshape(-1,1)
+    #print(a)
+    #array = np.array(a, dtype=np.float)
+    #array = MinMaxScaler().fit_transform(array)
+    #LEAVING OFF ON: ordering data in a 2-d way to use this function
+    # region manually rebuild dataframe to transform it
+    DTreframe = {
+        'Region': ['West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West',
+                   'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West',
+                   'West', 'West', 'West', 'West',
+                   'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest',
+                   'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest',
+                   'SouthWest', 'SouthWest' , 'SouthWest', 'SouthWest',
+                   'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest',
+                   'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest',
+                   'MidWest', 'MidWest', 'MidWest', 'MidWest',
+                   'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast',
+                   'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast',
+                   'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast',
+                   'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast',
+                   'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast',
+                   'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast'],
+        'Years': [1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
+                  1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
+                  1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
+                  1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
+                  1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015],
+        'Fire Count': [14941.75, 14941.75, 14941.75, 14941.75, 17975.2, 17975.2, 17975.2, 17975.2, 17975.2, 17461.4, 17461.4, 17461.4, 17461.4, 17461.4, 17151.6, 17151.6, 17151.6, 17151.6, 17151.6, 16751.6, 16751.6, 16751.6, 16751.6, 16751.6,
+                       3931.75, 3931.75, 3931.75, 3931.75, 5203, 5203, 5203, 5203, 5203, 5632, 5632, 5632, 5632, 5632, 9803.2, 9803.2, 9803.2, 9803.2, 9803.2, 15460.4, 15460.4, 15460.4, 15460.4, 15460.4,
+                       1293.75, 1293.75, 1293.75, 1293.75, 3131.4, 3131.4, 3131.4, 3131.4, 3131.4, 3681.2, 3681.2, 3681.2, 3681.2, 3681.2, 3401.8, 3401.8, 3401.8, 3401.8, 3401.8, 5995.2, 5995.2, 5995.2, 5995.2, 5995.2,
+                       1637.25, 1637.25, 1637.25, 1637.25, 9159, 9159, 9159, 9159, 9159, 9580.8, 9580.8, 9580.8, 9580.8, 9580.8, 5782.8, 5782.8, 5782.8, 5782.8, 5782.8, 18028.4, 18028.4, 18028.4, 18028.4, 18028.4,
+                       444.25, 444.25, 444.25, 444.25, 106.6, 106.6, 106.6, 106.6, 106.6, 111.4, 111.4, 111.4, 111.4, 111.4, 143, 143, 143, 143, 143, 2212.2, 2212.2, 2212.2, 2212.2, 2212.2]
+    }
+    # end region
+    df = pd.DataFrame(DTreframe)
+    print(df)
+    #X, y = array[:, :-1], array[:, -1]
 
 if __name__ == '__main__':
     print("Beginning")
