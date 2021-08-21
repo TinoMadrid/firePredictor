@@ -1,9 +1,10 @@
 from csv import reader
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.widgets import Button
 import pandas as pd
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from sklearn.model_selection import train_test_split
+from scipy import stats
+from sklearn.linear_model import LinearRegression
 
 def readDataIntoHistogram():
     # regions of the US
@@ -134,8 +135,6 @@ def plotHistogram(west, southwest, midwest, southeast, northeast):
     handles = [plt.Rectangle((0,0),1,1, color=colors[label]) for label in labels]
     plt.legend(handles, labels)
 
-    plt.show()
-
     dataFrame = {
         'Region': ['West','West','West','West','West', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest',
                    'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast'],
@@ -145,19 +144,21 @@ def plotHistogram(west, southwest, midwest, southeast, northeast):
                        southeast[0], southeast[1], southeast[2], southeast[3], southeast[4], northeast[0], northeast[1], northeast[2], northeast[3], northeast[4]]
     }
     df = pd.DataFrame(dataFrame)
-    precursorOfPredictionData(df)
+    axes = plt.axes([0.81, 0.000001, 0.1, 0.075])
+    bnext = Button(axes, 'Future fires', color="yellow")
+    bnext.on_clicked(event)
+    plt.show()
 
+def event(df):
+    print('Firing precursor function')
+    precursorOfPredictionData(df)
+    #result = list(precursorOfPredictionData(df))
+    #fig, plts = plt.subplots(nrows=len(result), figsize=(8, 8))
+
+    #plts.bar(0.25, )
+    #print(result)
 
 def precursorOfPredictionData(DTframe):
-    fireColumn = DTframe['Fire Count']
-    #fireColumn.reshape(-1,1)
-    #a = np.array(fireColumn.values.tolist())
-    #a.reshape(-1,1)
-    #print(a)
-    #array = np.array(a, dtype=np.float)
-    #array = MinMaxScaler().fit_transform(array)
-    #LEAVING OFF ON: ordering data in a 2-d way to use this function
-    # region manually rebuild dataframe to transform it
     DTreframe = {
         'Region': ['West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West',
                    'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West',
@@ -174,22 +175,110 @@ def precursorOfPredictionData(DTframe):
                    'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast',
                    'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast',
                    'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast'],
-        'Years': [1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
-                  1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
-                  1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
-                  1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
-                  1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015],
+        'Years': ['1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
+                  '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
+                  '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
+                  '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
+                  '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015'
+                  ],
         'Fire Count': [14941.75, 14941.75, 14941.75, 14941.75, 17975.2, 17975.2, 17975.2, 17975.2, 17975.2, 17461.4, 17461.4, 17461.4, 17461.4, 17461.4, 17151.6, 17151.6, 17151.6, 17151.6, 17151.6, 16751.6, 16751.6, 16751.6, 16751.6, 16751.6,
                        3931.75, 3931.75, 3931.75, 3931.75, 5203, 5203, 5203, 5203, 5203, 5632, 5632, 5632, 5632, 5632, 9803.2, 9803.2, 9803.2, 9803.2, 9803.2, 15460.4, 15460.4, 15460.4, 15460.4, 15460.4,
                        1293.75, 1293.75, 1293.75, 1293.75, 3131.4, 3131.4, 3131.4, 3131.4, 3131.4, 3681.2, 3681.2, 3681.2, 3681.2, 3681.2, 3401.8, 3401.8, 3401.8, 3401.8, 3401.8, 5995.2, 5995.2, 5995.2, 5995.2, 5995.2,
                        1637.25, 1637.25, 1637.25, 1637.25, 9159, 9159, 9159, 9159, 9159, 9580.8, 9580.8, 9580.8, 9580.8, 9580.8, 5782.8, 5782.8, 5782.8, 5782.8, 5782.8, 18028.4, 18028.4, 18028.4, 18028.4, 18028.4,
                        444.25, 444.25, 444.25, 444.25, 106.6, 106.6, 106.6, 106.6, 106.6, 111.4, 111.4, 111.4, 111.4, 111.4, 143, 143, 143, 143, 143, 2212.2, 2212.2, 2212.2, 2212.2, 2212.2]
     }
-    # end region
-    df = pd.DataFrame(DTreframe)
-    print(df)
-    #X, y = array[:, :-1], array[:, -1]
+    westRegionFrame = {
+        'Years': [1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015],
+        'Fire Count': [14941.75, 14941.75, 14941.75, 14941.75, 17975.2, 17975.2, 17975.2, 17975.2, 17975.2, 17461.4,
+                       17461.4, 17461.4, 17461.4, 17461.4, 17151.6, 17151.6, 17151.6, 17151.6, 17151.6, 16751.6, 16751.6, 16751.6, 16751.6, 16751.6]
+    }
+    SouthWestRegionFrame = {
+        'Years': [1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+                  2009, 2010, 2011, 2012, 2013, 2014, 2015],
+        'Fire Count': [3931.75, 3931.75, 3931.75, 3931.75, 5203, 5203, 5203, 5203, 5203, 5632, 5632, 5632, 5632, 5632, 9803.2, 9803.2, 9803.2, 9803.2, 9803.2, 15460.4, 15460.4, 15460.4, 15460.4, 15460.4,]
+    }
+    MidWestRegionFrame = {
+        'Years': [1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+                  2009, 2010, 2011, 2012, 2013, 2014, 2015],
+        'Fire Count': [1293.75, 1293.75, 1293.75, 1293.75, 3131.4, 3131.4, 3131.4, 3131.4, 3131.4, 3681.2, 3681.2, 3681.2, 3681.2, 3681.2, 3401.8, 3401.8, 3401.8, 3401.8, 3401.8, 5995.2, 5995.2, 5995.2, 5995.2, 5995.2]
+    }
+    SouthEastRegionFrame = {
+        'Years': [1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+                  2009, 2010, 2011, 2012, 2013, 2014, 2015],
+        'Fire Count': [1637.25, 1637.25, 1637.25, 1637.25, 9159, 9159, 9159, 9159, 9159, 9580.8, 9580.8, 9580.8, 9580.8, 9580.8, 5782.8, 5782.8, 5782.8, 5782.8, 5782.8, 18028.4, 18028.4, 18028.4, 18028.4, 18028.4]
+    }
+    NorthEastRegionFrame = {
+        'Years': [1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+                  2009, 2010, 2011, 2012, 2013, 2014, 2015],
+        'Fire Count': [444.25, 444.25, 444.25, 444.25, 106.6, 106.6, 106.6, 106.6, 106.6, 111.4, 111.4, 111.4, 111.4, 111.4, 143, 143, 143, 143, 143, 2212.2, 2212.2, 2212.2, 2212.2, 2212.2]
+    }
+
+    # convert dictionaries to pandas dataframe
+    westDF = pd.DataFrame(westRegionFrame)
+    SouthWestDF = pd.DataFrame(SouthWestRegionFrame)
+    MidWestDF = pd.DataFrame(MidWestRegionFrame)
+    SouthEastDF = pd.DataFrame(SouthEastRegionFrame)
+    NorthEastDF = pd.DataFrame(NorthEastRegionFrame)
+
+    # west
+    x_west = westDF['Years'].values.tolist()
+    year_west = np.array(x_west)
+    year_west = year_west.reshape((-1,1))
+    y_west = westDF['Fire Count'].values
+    fire_west = np.array(y_west)
+    fire_west = fire_west.reshape((-1,1))
+
+    # southwest
+    x_southwest = SouthWestDF['Years'].values.tolist()
+    year_southwest = np.array(x_southwest)
+    year_southwest = year_southwest.reshape((-1,1))
+    y_southwest = SouthWestDF['Fire Count'].values
+    fire_southwest = np.array(y_southwest)
+    fire_southwest = fire_southwest.reshape((-1,1))
+
+    # midwest
+    x_midwest = MidWestDF['Years'].values.tolist()
+    year_midwest = np.array(x_midwest)
+    year_midwest = year_midwest.reshape((-1,1))
+    y_midwest = MidWestDF['Fire Count'].values
+    fire_midwest = np.array(y_midwest)
+    fire_midwest = fire_midwest.reshape((-1,1))
+
+    # southeast
+    x_southeast = SouthEastDF['Years'].values.tolist()
+    year_southeast = np.array(x_southeast)
+    year_southeast = year_southeast.reshape((-1,1))
+    y_southeast = SouthEastDF['Fire Count'].values
+    fire_southeast = np.array(y_southeast)
+    fire_southeast = fire_southeast.reshape((-1,1))
+
+    # northeast
+    x_northeast = NorthEastDF['Years'].values.tolist()
+    year_northeast = np.array(x_northeast)
+    year_northeast = year_northeast.reshape((-1,1))
+    y_northeast = NorthEastDF['Fire Count'].values
+    fire_northeast = np.array(y_northeast)
+    fire_northeast = fire_northeast.reshape((-1,1))
+
+    west_model = LinearRegression().fit(year_west, fire_west)
+    southwest_model = LinearRegression().fit(year_southwest, fire_southwest)
+    midwest_reg = LinearRegression().fit(year_midwest, fire_midwest)
+    southeast_reg = LinearRegression().fit(year_southeast, fire_southeast)
+    northeast_reg = LinearRegression().fit(year_northeast, fire_northeast)
+
+    # future fire prediction containers
+    westFuture = southWestFuture = midWestFuture = southEastFuture = northEastFuture = []
+
+    for i in range(2022, 2030):
+        westFuture.append(west_model.predict([[i]]))
+        #southWestFuture.append(southwest_reg.predict([[i]]))
+        #midWestFuture.append(midwest_reg.predict([[i]]))
+        #southEastFuture.append(southeast_reg.predict([[i]]))
+        #northEastFuture.append(northeast_reg.predict([[i]]))
+    for i in range(2022, 2030):
+        southWestFuture.append(southwest_model.predict([[i]]))
+    print('westFuture:', westFuture[1])
+    print('southwestFuture: ', southWestFuture[1])
 
 if __name__ == '__main__':
-    print("Beginning")
     readDataIntoHistogram()
