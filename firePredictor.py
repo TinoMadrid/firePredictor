@@ -112,9 +112,7 @@ def readDataIntoHistogram():
 
 def plotHistogram(west, southwest, midwest, southeast, northeast):
     data = [west, southwest, midwest, southeast, northeast]
-
     X = np.arange(5)
-
     fig, ax = plt.subplots()
 
     ax.bar(X + 0.1, data[0], color='b', width=0.2)
@@ -129,7 +127,7 @@ def plotHistogram(west, southwest, midwest, southeast, northeast):
     ax.set_xlabel('Years')
     ax.set_title('Wildfire Outbreak by Years')
 
-
+    #legend of existing data
     colors = {'west':'blue', 'southwest':'black', 'midwest':'red', 'southeast':'yellow', 'northeast':'green'}
     labels = list(colors.keys())
     handles = [plt.Rectangle((0,0),1,1, color=colors[label]) for label in labels]
@@ -152,7 +150,7 @@ def plotHistogram(west, southwest, midwest, southeast, northeast):
 def event(df):
     print('Firing precursor function')
     west, southwest, midwest, southeast, northeast = precursorOfPredictionData(df)
-    print('Predicted containers')
+    futureFireGraph(west, southwest, midwest, southeast, northeast)
 
 def precursorOfPredictionData(DTframe):
     DTreframe = {
@@ -269,13 +267,27 @@ def precursorOfPredictionData(DTframe):
     southEastFuture = []
     northEastFuture = []
 
-    for i in range(2022, 2030):
+    for i in range(2022, 2027):
         westFuture.append(west_reg.predict([[i]]))
         southWestFuture.append(southwest_reg.predict([[i]]))
         midWestFuture.append(midwest_reg.predict([[i]]))
         southEastFuture.append(southeast_reg.predict([[i]]))
         northEastFuture.append(northeast_reg.predict([[i]]))
     return westFuture, southWestFuture, midWestFuture, southEastFuture, northEastFuture
+
+def futureFireGraph(w, sw, mw, se, ne):
+    data = [sum(w), sum(sw), sum(mw), sum(se), sum(ne)]
+    data = np.array(data).flatten()
+    X = np.arange(1)
+    fig, ax = plt.subplots()
+
+    ax.bar(X + 0.1, data[0], color='b', width=0.2)
+    ax.bar(X + 0.3, data[1], color='k', width=0.2)
+    ax.bar(X + 0.4, data[2], color='r', width=0.2)
+    ax.bar(X + 0.5, data[3], color='y', width=0.2)
+    ax.bar(X + 0.6, data[4], color='g', width=0.2)
+
+    plt.show()
 
 if __name__ == '__main__':
     readDataIntoHistogram()
