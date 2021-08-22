@@ -133,54 +133,16 @@ def plotHistogram(west, southwest, midwest, southeast, northeast):
     handles = [plt.Rectangle((0,0),1,1, color=colors[label]) for label in labels]
     plt.legend(handles, labels)
 
-    dataFrame = {
-        'Region': ['West','West','West','West','West', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest',
-                   'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast'],
-        'Years': ['1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015', '1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015', '1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015',
-                  '1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015', '1992-1995', '1996-2000', '2001-2005', '2006-2010', '2011-2015'],
-        'Fire Count': [west[0], west[1], west[2], west[3], west[4], southwest[0], southwest[1], southwest[2], southwest[3], southwest[4], midwest[0], midwest[1], midwest[2], midwest[3], midwest[4],
-                       southeast[0], southeast[1], southeast[2], southeast[3], southeast[4], northeast[0], northeast[1], northeast[2], northeast[3], northeast[4]]
-    }
-    df = pd.DataFrame(dataFrame)
-    axes = plt.axes([0.81, 0.000001, 0.1, 0.075])
-    bnext = Button(axes, 'Future fires', color="yellow")
+    axes = plt.axes([0.88, 0.000001, 0.11, 0.075])
+    bnext = Button(axes, 'Predictions', color="yellow")
     bnext.on_clicked(event)
     plt.show()
 
 def event(df):
-    print('Firing precursor function')
-    west, southwest, midwest, southeast, northeast = precursorOfPredictionData(df)
+    west, southwest, midwest, southeast, northeast = precursorOfPredictionData()
     futureFireGraph(west, southwest, midwest, southeast, northeast)
 
-def precursorOfPredictionData(DTframe):
-    DTreframe = {
-        'Region': ['West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West',
-                   'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West', 'West',
-                   'West', 'West', 'West', 'West',
-                   'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest',
-                   'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest', 'SouthWest',
-                   'SouthWest', 'SouthWest' , 'SouthWest', 'SouthWest',
-                   'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest',
-                   'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest', 'MidWest',
-                   'MidWest', 'MidWest', 'MidWest', 'MidWest',
-                   'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast',
-                   'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast',
-                   'SouthEast', 'SouthEast', 'SouthEast', 'SouthEast',
-                   'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast',
-                   'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast',
-                   'NorthEast', 'NorthEast', 'NorthEast', 'NorthEast'],
-        'Years': ['1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
-                  '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
-                  '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
-                  '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
-                  '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015'
-                  ],
-        'Fire Count': [14941.75, 14941.75, 14941.75, 14941.75, 17975.2, 17975.2, 17975.2, 17975.2, 17975.2, 17461.4, 17461.4, 17461.4, 17461.4, 17461.4, 17151.6, 17151.6, 17151.6, 17151.6, 17151.6, 16751.6, 16751.6, 16751.6, 16751.6, 16751.6,
-                       3931.75, 3931.75, 3931.75, 3931.75, 5203, 5203, 5203, 5203, 5203, 5632, 5632, 5632, 5632, 5632, 9803.2, 9803.2, 9803.2, 9803.2, 9803.2, 15460.4, 15460.4, 15460.4, 15460.4, 15460.4,
-                       1293.75, 1293.75, 1293.75, 1293.75, 3131.4, 3131.4, 3131.4, 3131.4, 3131.4, 3681.2, 3681.2, 3681.2, 3681.2, 3681.2, 3401.8, 3401.8, 3401.8, 3401.8, 3401.8, 5995.2, 5995.2, 5995.2, 5995.2, 5995.2,
-                       1637.25, 1637.25, 1637.25, 1637.25, 9159, 9159, 9159, 9159, 9159, 9580.8, 9580.8, 9580.8, 9580.8, 9580.8, 5782.8, 5782.8, 5782.8, 5782.8, 5782.8, 18028.4, 18028.4, 18028.4, 18028.4, 18028.4,
-                       444.25, 444.25, 444.25, 444.25, 106.6, 106.6, 106.6, 106.6, 106.6, 111.4, 111.4, 111.4, 111.4, 111.4, 143, 143, 143, 143, 143, 2212.2, 2212.2, 2212.2, 2212.2, 2212.2]
-    }
+def precursorOfPredictionData():
     westRegionFrame = {
         'Years': [1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015],
         'Fire Count': [14941.75, 14941.75, 14941.75, 14941.75, 17975.2, 17975.2, 17975.2, 17975.2, 17975.2, 17461.4,
@@ -286,6 +248,17 @@ def futureFireGraph(w, sw, mw, se, ne):
     ax.bar(X + 0.4, data[2], color='r', width=0.2)
     ax.bar(X + 0.5, data[3], color='y', width=0.2)
     ax.bar(X + 0.6, data[4], color='g', width=0.2)
+
+    ax.set_xticks([0, 0.7])
+    ax.set_xticklabels(['2022', '2027'])
+    ax.set_ylabel('Fire Outbreak Count')
+    ax.set_xlabel('Years')
+    ax.set_title('Predicted Fire Outbreak Next 5 Years')
+
+    colors = {'west': 'blue', 'southwest': 'black', 'midwest': 'red', 'southeast': 'yellow', 'northeast': 'green'}
+    labels = list(colors.keys())
+    handles = [plt.Rectangle((0, 0), 1, 1, color=colors[label]) for label in labels]
+    plt.legend(handles, labels)
 
     plt.show()
 
