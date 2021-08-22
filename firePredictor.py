@@ -151,12 +151,8 @@ def plotHistogram(west, southwest, midwest, southeast, northeast):
 
 def event(df):
     print('Firing precursor function')
-    precursorOfPredictionData(df)
-    #result = list(precursorOfPredictionData(df))
-    #fig, plts = plt.subplots(nrows=len(result), figsize=(8, 8))
-
-    #plts.bar(0.25, )
-    #print(result)
+    west, southwest, midwest, southeast, northeast = precursorOfPredictionData(df)
+    print('Predicted containers')
 
 def precursorOfPredictionData(DTframe):
     DTreframe = {
@@ -260,25 +256,26 @@ def precursorOfPredictionData(DTframe):
     fire_northeast = np.array(y_northeast)
     fire_northeast = fire_northeast.reshape((-1,1))
 
-    west_model = LinearRegression().fit(year_west, fire_west)
-    southwest_model = LinearRegression().fit(year_southwest, fire_southwest)
+    west_reg = LinearRegression().fit(year_west, fire_west)
+    southwest_reg = LinearRegression().fit(year_southwest, fire_southwest)
     midwest_reg = LinearRegression().fit(year_midwest, fire_midwest)
     southeast_reg = LinearRegression().fit(year_southeast, fire_southeast)
     northeast_reg = LinearRegression().fit(year_northeast, fire_northeast)
 
     # future fire prediction containers
-    westFuture = southWestFuture = midWestFuture = southEastFuture = northEastFuture = []
+    westFuture = []
+    southWestFuture = []
+    midWestFuture = []
+    southEastFuture = []
+    northEastFuture = []
 
     for i in range(2022, 2030):
-        westFuture.append(west_model.predict([[i]]))
-        #southWestFuture.append(southwest_reg.predict([[i]]))
-        #midWestFuture.append(midwest_reg.predict([[i]]))
-        #southEastFuture.append(southeast_reg.predict([[i]]))
-        #northEastFuture.append(northeast_reg.predict([[i]]))
-    for i in range(2022, 2030):
-        southWestFuture.append(southwest_model.predict([[i]]))
-    print('westFuture:', westFuture[1])
-    print('southwestFuture: ', southWestFuture[1])
+        westFuture.append(west_reg.predict([[i]]))
+        southWestFuture.append(southwest_reg.predict([[i]]))
+        midWestFuture.append(midwest_reg.predict([[i]]))
+        southEastFuture.append(southeast_reg.predict([[i]]))
+        northEastFuture.append(northeast_reg.predict([[i]]))
+    return westFuture, southWestFuture, midWestFuture, southEastFuture, northEastFuture
 
 if __name__ == '__main__':
     readDataIntoHistogram()
