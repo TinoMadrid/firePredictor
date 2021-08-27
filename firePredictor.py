@@ -1,10 +1,13 @@
 import tkinter
 from csv import reader
+
+import cursor as cursor
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button as Buttons
 import pandas as pd
 from sklearn.linear_model import LinearRegression
+import mplcursors
 
 def readDataIntoHistogram():
     # regions of the US
@@ -132,6 +135,16 @@ def plotHistogram(west, southwest, midwest, southeast, northeast):
     labels = list(colors.keys())
     handles = [plt.Rectangle((0,0),1,1, color=colors[label]) for label in labels]
     plt.legend(handles, labels)
+
+    cursor = mplcursors.cursor(hover=mplcursors.HoverMode.Transient)
+
+    @cursor.connect("add")
+    def on_add(se):
+        x, y, width, height = se.artist[se.target.index].get_bbox().bounds
+        height = round(height)
+        se.annotation.set(text=height,
+                           position=(0, 20), anncoords="offset points")
+        se.annotation.xy = (x + width / 2, y + height)
 
     axes = plt.axes([0.88, 0.000001, 0.11, 0.075])
     bnext = Buttons(axes, 'Predictions', color="yellow")
@@ -472,6 +485,15 @@ def futureFireGraph(w, sw, mw, se, ne):
     ax.set_xlabel('Years')
     ax.set_title('Predicted Fire Outbreak Next 5 Years')
 
+    cursor = mplcursors.cursor(hover=mplcursors.HoverMode.Transient)
+    @cursor.connect("add")
+    def on_add(se):
+        x, y, width, height = se.artist[se.target.index].get_bbox().bounds
+        height = round(height)
+        se.annotation.set(text=height,
+                           position=(0, 20), anncoords="offset points")
+        se.annotation.xy = (x + width / 2, y + height)
+
     colors = {'west': 'blue', 'southwest': 'black', 'midwest': 'red', 'southeast': 'yellow', 'northeast': 'green'}
     labels = list(colors.keys())
     handles = [plt.Rectangle((0, 0), 1, 1, color=colors[label]) for label in labels]
@@ -496,6 +518,15 @@ def futureFireGraph10Year(w, sw, mw, se, ne):
     ax.set_ylabel('Fire Outbreak Count')
     ax.set_xlabel('Years')
     ax.set_title('Predicted Fire Outbreak Next 10 Years')
+
+    cursor = mplcursors.cursor(hover=mplcursors.HoverMode.Transient)
+    @cursor.connect("add")
+    def on_add(se):
+        x, y, width, height = se.artist[se.target.index].get_bbox().bounds
+        height = round(height)
+        se.annotation.set(text=height,
+                           position=(0, 20), anncoords="offset points")
+        se.annotation.xy = (x + width / 2, y + height)
 
     colors = {'west': 'blue', 'southwest': 'black', 'midwest': 'red', 'southeast': 'yellow', 'northeast': 'green'}
     labels = list(colors.keys())
@@ -522,6 +553,14 @@ def futureFireGraph15Year(w, sw, mw, se, ne):
     ax.set_xlabel('Years')
     ax.set_title('Predicted Fire Outbreak Next 15 Years')
 
+    cursor = mplcursors.cursor(hover=mplcursors.HoverMode.Transient)
+    @cursor.connect("add")
+    def on_add(se):
+        x, y, width, height = se.artist[se.target.index].get_bbox().bounds
+        height = round(height)
+        se.annotation.set(text=height,
+                           position=(0, 20), anncoords="offset points")
+        se.annotation.xy = (x + width / 2, y + height)
     colors = {'west': 'blue', 'southwest': 'black', 'midwest': 'red', 'southeast': 'yellow', 'northeast': 'green'}
     labels = list(colors.keys())
     handles = [plt.Rectangle((0, 0), 1, 1, color=colors[label]) for label in labels]
