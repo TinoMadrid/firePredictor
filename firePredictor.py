@@ -1,13 +1,13 @@
 import tkinter
 from csv import reader
 
-import cursor as cursor
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button as Buttons
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 import mplcursors
+from sklearn.metrics import max_error
 
 def readDataIntoHistogram():
     # regions of the US
@@ -261,6 +261,14 @@ def precursorOfPredictionData():
     midwest_reg = LinearRegression().fit(year_midwest, fire_midwest)
     southeast_reg = LinearRegression().fit(year_southeast, fire_southeast)
     northeast_reg = LinearRegression().fit(year_northeast, fire_northeast)
+
+    #accuracy verification
+    y_west_predict = []
+    for x in range(2022, 2046):
+        y_west_predict.append(west_reg.predict([[x]]))
+    ywp = np.array(y_west_predict)
+    ywp = ywp.reshape((-1,1))
+    print(max_error(y_west, ywp))
 
     # future fire prediction containers
     westFuture = []
